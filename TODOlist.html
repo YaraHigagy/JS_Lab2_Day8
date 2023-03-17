@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODO List</title>
+  <style>
+    form{
+      font-family: Tahoma;
+      background: rgb(236, 236, 236);
+      width: 350px;
+      border: solid 2px rgb(221, 221, 221);
+      padding: 30px;
+      /* display: flex;
+      flex-wrap: wrap; */
+      margin: auto;
+    }
+    .taskAdding{
+      display: flex;
+      justify-content: space-around;
+    }
+    .taskField{
+      border: solid 2px rgb(221, 221, 221);
+      border-radius: 4px;
+      /* margin-left: 20px;
+      margin-right: 8px; */
+      padding: 10px;
+    }
+    #taskAddBtn{
+      background-color: rgb(89, 136, 236);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    #taskAddBtn:hover{
+      background-color: rgba(89, 135, 236, 0.5);
+    }
+    label{
+      /* justify-content: center;
+      text-align: center; */
+      padding: 10px;
+    }
+    /* #taskId{
+      background-color: white;
+      border-color: rgb(221, 221, 221);
+    } */
+    #list{
+      background-color: white;
+      /* border: solid 2px rgb(221, 221, 221);
+      border-radius: 20px; */  /* to make that effect i have to delete border from taskContainerId and add a hr in the bottom in it or make it by a func. of if statement about the hr and the condition of 2 siplings taskconainerIds */
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+      /* padding: 10px; */
+    }
+    #taskContainerId{
+      display: flex;
+      width: 100%;
+      padding: 10px;
+      /* justify-content: space-around; */
+      align-items: center;
+      border: solid 2px rgb(221, 221, 221);
+    }
+    #taskContainerId:hover {
+      background-color: rgba(207, 74, 74, 0.2);
+    }
+    #taskStatusId{
+      /* width: 100%; */
+      /* display: flex; */
+      /* justify-content: space-around; */
+      /* border: solid 2px gray; */
+      /* margin-right: 0; */
+      margin: auto;
+      margin-right: 0;
+    }
+    #taskDoneId{
+      background-color: rgb(92, 180, 81);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px;
+      margin-right: 8px;
+    }
+    #taskDelId{
+      background-color: rgb(207, 74, 74);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px;
+    }
+    #taskDoneId:hover{
+      background-color: rgba(93, 180, 81, 0.5);
+    }
+    #taskDelId:hover{
+      background-color: rgba(207, 74, 74, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- <form action="#" method="get"  onsubmit="return addTask()"> -->
+  <form>
+    <div id="list">
+
+    </div>
+    <div class="taskAdding">
+      <label>Task</label>
+      <input class="taskField" id="taskField"
+        type="text" placeholder="Task name">
+      <button id="taskAddBtn" onclick="return addTask()">Add</button>
+    </div>
+  </form>
+  <script>
+    const listArr = [];
+    function addTask(){
+      // Capture the task name text
+      var taskNameCapture = document.getElementById("taskField").value;
+       
+      // Saving task name in local storage
+      localStorage.setItem("taskName", taskNameCapture);
+      console.log(localStorage);
+
+      // Creating a div as a container to hold: task name, done btn, del btn
+      var taskInList = document.createElement("div");
+      // Giving that dit an Id tor styling
+      taskInList.setAttribute("id", "taskContainerId");
+
+      document.getElementById("list").append(taskInList);
+      taskInList.append(taskNameCapture);
+      // Creating a div as a container for done btn, and del btn
+      var taskStatus = document.createElement("div");
+      taskStatus.setAttribute("id", "taskStatusId");
+
+      var taskDone = document.createElement("button");
+      taskDone.setAttribute("id", "taskDoneId");
+      taskDone.insertAdjacentHTML('afterbegin', "Done?");
+      taskDone.addEventListener('click', () => {
+        taskInList.textContent = `${taskNameCapture.value} is Done`;
+        taskInList.style.backgroundColor = "rgba(93, 180, 81, 0.2)";
+      });
+
+      var taskDel = document.createElement("button");
+      taskDel.setAttribute("id", "taskDelId");
+      taskDel.insertAdjacentHTML('beforeend', "Delete?");
+      taskDel.addEventListener('click', () => {
+        taskInList.remove();
+      });
+
+      taskStatus.append(taskDone);
+      taskStatus.append(taskDel);
+      taskInList.append(taskStatus);
+
+      listArr.push(taskInList);
+      return taskInList;
+      // return false;
+    }
+
+  </script>
+</body>
+</html>
+<!--
+    /*function addTask(){
+      // Capture the task name text
+      var taskNameCapture = document.getElementById("taskField").value; //
+      // var taskValToString = taskNameCapture.toString(); //
+      // var taskNameCapture = document.getElementById("taskField");
+      // var taskText = taskNameCapture.toString();
+       
+      // Creating a div to hold: task name, done btn, del btn
+      var taskInList = document.createElement("div");
+      // Giving that dit an Id tor styling
+      taskInList.setAttribute("id", "taskContainerId");
+
+      // Connecting the task name text to that div
+      // var taskText = document.createTextNode(`${taskValToString}`); //
+      // Adding task name element as a text into that div
+      // taskInList.appendChild(taskText); //
+      // Adding that div into the list container
+      document.getElementById("list").append(taskInList);
+      taskInList.append(taskNameCapture);
+      // taskInList.innerText = `${taskText.value}`;
+      // taskInList.insertAdjacentText('afterbegin', `${taskNameCapture.value}`);
+      // document.getElementById("taskContainerId").innerHTML = (list.querySelector(taskNameCapture).innerHTML);
+
+      var taskStatus = document.createElement("div");
+      taskStatus.setAttribute("id", "taskStatusId");
+
+      var taskDone = document.createElement("button");
+      taskDone.setAttribute("id", "taskDoneId");
+      // var a = document.createTextNode("Done?");
+      // taskDone.appendChild(a);
+      taskDone.insertAdjacentHTML('afterbegin', "Done?");
+      taskDone.addEventListener('click', () => {
+        taskInList.textContent = `${taskNameCapture.value} is Done`;
+        taskInList.style.backgroundColor = "rgba(93, 180, 81, 0.2)";
+      });
+
+      var taskDel = document.createElement("button");
+      taskDel.setAttribute("id", "taskDelId");
+      // var taskText = document.createTextNode("Delete?");
+      taskDel.insertAdjacentHTML('beforeend', "Delete?");
+      taskDel.addEventListener('click', () => {
+        taskInList.remove();
+      });
+
+      taskStatus.append(taskDone);
+      taskStatus.append(taskDel);
+      taskInList.append(taskStatus);
+
+      listArr.push(taskInList);
+      return taskInList;
+    }*/
+  // addTask();
+    // document.getElementById("taskAddBtn").onclick = addTask();
+    // listArr.push(taskInList);
+    
+ // function addTask(){
+  //   var parentElem = document.getElementById("main");
+  //   var childElem = document.getElementById("hint");
+  //   parentElem.removeChild(childElem);
+
+  //   var taskName = document.getElementById("task").value;
+  //   var taskInList = document.createElement('div');
+  //   taskInList.setAttribute("id", "taskId");
+  //   document.getElementById("taskId").insertAdjacentHTML().afterbegin = taskName;
+  //   document.getElementById("list").appendChild(taskInList);
+  //   var taskDone = document.createElement('button');
+  //   taskDone.setAttribute("id", "butDoneId");
+  //   document.getElementById("taskId").appendChild(taskDone);
+  //   var taskDel = document.createElement('button');
+  //   taskDone.setAttribute("id", "butDelId");
+  //   document.getElementById("taskId").appendChild(taskDel);
+  //   if(taskDone.onclick){
+  //     document.getElementById("taskId").innerHTML = `${taskName} is done`;
+  //   }else if(taskDel.onclick){
+  //     list.removeChild(taskInList);
+  //   }
+  // }
+  // document.getElementById("taskAddBtn").onclick = addTask(); -->
+

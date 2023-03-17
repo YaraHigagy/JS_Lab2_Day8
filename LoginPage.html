@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body{
+      background-color: rgb(90, 155, 70);
+    }
+    form{
+      background-color: white;
+      width: 300px;
+      height: 300px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      /* justify-content: center; */
+      /* align-items: center; */
+      margin: auto;
+      display: grid;
+      padding: 30px;
+    }
+    .userName{
+      background-color: rgb(240, 240, 240);
+      border: none;
+      /* margin-bottom: 18px; */
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+    .password{
+      background-color: rgb(240, 240, 240);
+      border: none;
+      /* margin-bottom: 18px; */
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+    #loginbtn{
+      background-color: rgb(29, 196, 79);
+      color: white;
+      border: none;
+      margin-bottom: 18px;
+      display: block;
+      font-size: 18px;
+    }
+    #loginbtn:hover{
+      background-color: rgba(29, 196, 79, 0.623);
+    }
+    .notRegistered{
+      text-align: center;
+      color: rgb(161, 161, 161);
+    }
+    #loginResult{
+      text-align: center;
+    }
+    .row{
+      display: grid;
+    }
+    .error{
+      color: red;
+      font-size: 14px;
+      padding-bottom: 0px;
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+  </style>
+</head>
+<body>
+  <!-- The data disappearing problem is because the form submits and refreshes the page.The solution is to cancel the form request. -->
+  <!-- <form action="#" method="get" onsubmit="return login()"> -->
+  <form> 
+    <div class="row">
+      <input class="userName" id="userName"
+      type="text" placeholder="username">
+      <div class="error" id="nameErr"></div>
+    </div>
+    <div class="row">
+      <input class="password"
+              type="password" name="password" id="password" 
+              placeholder="password (MaxLength = 8)" maxlength="8">
+      <div class="error" id="passErr"></div>
+    </div>
+    <button id="loginbtn">LOGIN</button>
+    <div class="notRegistered">
+      <label>Not registered?</label>
+      <a href="RegistrationFormFromPreviousTask/RegistrationForm.html" target="_self">Create an account</a>
+    </div>
+  </form>
+  <p id="loginResult"></p>
+  <!-- <p id="result"></p> -->
+  <div class="userData">
+    <!-- User Email: <span id="userData"></span>
+    User Image: <img src="" id="image"> -->
+  </div>
+  <script>
+    function printErr(elemId, hintMsg){
+      document.getElementById(elemId).innerHTML = hintMsg;
+    }
+
+    // const dataArr = {
+    //   user1: {
+    //     name: "admin",
+    //     pass: "123"
+    //   }
+    // };
+    const user1 = {
+        name: "ITI admin",
+        pass: "aAZz1234"
+      };
+
+    function login(){
+      var userObj = new Object;
+      userObj.name = document.getElementById("userName").value;
+      userObj.pass = document.getElementById("password").value;
+      var a; // Not important, I just wanted the result to be a fixed text
+
+      var nameErr = passErr = true;
+      if(userObj.name == ""){
+        printErr("nameErr", "Please enter your name");
+      }else{
+        var regex = /^[a-zA-Z\s]+$/;
+        if(regex.test(userObj.name) === false){
+          printErr("nameErr", "Please enter a valid name");
+        }else{
+          printErr("nameErr", "");
+          nameErr = false;
+        }
+      }
+      if(userObj.pass == ""){
+        printErr("passErr", "Please enter your password");
+      }else{
+        var regex = /^[0-9a-zA-Z]{8}$/;
+        if(regex.test(userObj.pass) === false){
+          printErr("passErr", "The password must contain 8 characters and include small, capital letters and at least one number");
+        }else{
+          printErr("passErr", "");
+          passErr = false;
+        }
+      }
+      
+      if(userObj.name == user1.name && userObj.pass == user1.pass){
+        a = document.getElementById("loginResult").innerHTML = "Welcome";
+      }else{
+        a = document.getElementById("loginResult").innerHTML = "not registered";
+      }
+      return false;  // The data disappearing problem is because the form submits and refreshes the page.The solution is to cancel the form request.
+    }
+    // document.getElementById("result").append(a);
+    document.getElementById("loginbtn").onclick = login;
+
+    // ====================================================================
+
+    // Fetch user's data
+    var urlDB = "https://reqres.in/api/users?page=2";
+    async function getText(url) {
+      let response = await fetch(url);
+      let datax = await response.json();
+
+      for(let i = 0; i< datax.data.length; i++){
+        var xi = datax.data[i];
+        document.write('<div>');
+        document.write(`<p> User Email: ${xi.email}</p>`);
+        document.write(`<p> User Image: <img src='${xi.avatar}'></p>`);
+        document.write('</div>');
+        console.log(xi.id+ " " + xi.first_name + " " + xi.avatar );
+      }
+    }
+    getText(urlDB);
+
+    // async function getText(url) {
+    //   let response = await fetch(url);
+    //   let datax = await response.json(); 
+    //   // const {data} = datax;
+    //   // let blob = await response.blob();
+
+    //   // var dataxy = datax.data[0].email;
+    //   // var blobx = datax.data[0].avatar;
+
+    //   for(let i = 0; i< datax.data.length; i++){
+    //     var xi = datax.data[i];
+    //     document.getElementById("userData").innerHTML = xi.email;
+    //     document.getElementById("image").src = xi.avatar;
+    //     console.log(xi.first_name + " " + xi.id);
+    //   }
+    //   // console.log(xi.email);
+    //   // console.log(xi.avatar);
+    //   // for(var xy in datax.data[0].avatar){
+    //   //   document.getElementById("image").src = blobx;      
+    //   // }
+
+    //   // document.getElementById("userData").innerHTML = dataxy;
+    //   // document.getElementById("image").src = blobx;
+    //   // console.log(datax.data[0].email);
+    //   // console.log(datax.data[0].avatar);
+    // }
+
+    // fetch(urlDB)
+    //   .then(res => res.json())
+    //   .then(datax => console.log(datax))
+    //   .catch(err => console.log('err'));
+  </script>
+</body>
+</html>
